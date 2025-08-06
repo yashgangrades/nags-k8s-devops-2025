@@ -1,0 +1,30 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-sql
+
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS user_record (
+                                               user_id BIGSERIAL PRIMARY KEY,
+                                               name VARCHAR(255),
+                                               description TEXT,
+                                               email VARCHAR(255),
+                                               mobile_number VARCHAR(20),
+                                               created_at TIMESTAMP,
+                                               created_by VARCHAR(255),
+                                               updated_at TIMESTAMP,
+                                               updated_by VARCHAR(255)
+    );
+
+    INSERT INTO user_record (name, description, email, mobile_number) VALUES
+                                                                          ('Alice Johnson', 'Senior Software Engineer - Java + Kubernetes', 'alice.johnson@example.com', '9876543210'),
+                                                                          ('Bob Singh', 'DevOps Specialist - Terraform & Jenkins', 'bob.singh@example.com', '9876543211'),
+                                                                          ('Neha Verma', 'QA Automation Lead - Selenium & RestAssured', 'neha.verma@example.com', '9876543212'),
+                                                                          ('Rohit Mehta', 'Cloud Architect - AWS & Microservices', 'rohit.mehta@example.com', '9876543213'),
+                                                                          ('Sneha Kulkarni', 'Product Manager - Agile & Scrum', 'sneha.kulkarni@example.com', '9876543214'),
+                                                                          ('Tarun Batra', 'Backend Developer - Spring Boot & Kafka', 'tarun.batra@example.com', '9876543215'),
+                                                                          ('Isha Rao', 'DevOps Engineer - Helm & ArgoCD', 'isha.rao@example.com', '9876543216'),
+                                                                          ('Ankit Sharma', 'Frontend Engineer - React & TypeScript', 'ankit.sharma@example.com', '9876543217'),
+                                                                          ('Pooja Desai', 'Security Analyst - DevSecOps & SAST', 'pooja.desai@example.com', '9876543218'),
+                                                                          ('Karan Thakur', 'Site Reliability Engineer - Prometheus & Grafana', 'karan.thakur@example.com', '9876543219');

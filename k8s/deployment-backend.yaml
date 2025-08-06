@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-record-deployment
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: user-record-service
+  template:
+    metadata:
+      labels:
+        app: user-record-service
+    spec:
+      containers:
+        - name: user-record-container
+          image: oreilleewwew/user-record-ms:latest
+          ports:
+            - containerPort: 9090
+          env:
+            - name: SPRING_APP_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: SPRING_APP_NAME
+            - name: DATABASE_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: DATABASE_HOST
+            - name: DATABASE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: DATABASE_NAME
+            - name: DATABASE_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: DATABASE_PORT
+            - name: JPA_SHOW_SQL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: JPA_SHOW_SQL
+            - name: HIBERNATE_FORMAT_SQL
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: HIBERNATE_FORMAT_SQL
+            - name: SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE
+            - name: SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: SPRING_DATASOURCE_HIKARI_MINIMUM_IDLE
+            - name: SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: SPRING_DATASOURCE_HIKARI_IDLE_TIMEOUT
+            - name: SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT
+              valueFrom:
+                configMapKeyRef:
+                  name: postgres-configmap
+                  key: SPRING_DATASOURCE_HIKARI_CONNECTION_TIMEOUT
+            - name: DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DATABASE_USERNAME
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-credentials
+                  key: DATABASE_PASSWORD
