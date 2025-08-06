@@ -62,11 +62,13 @@ This microservice provides a REST API for managing user records with complete CR
   docker pull oreilleewwew/user-record-ms:latest
   ```
 
-### 🌐 Live Service URLs
-- **API Base URL**: `http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com`
+### 🌐 Live Service URLs (AWS Load Balancer)
+- **API Base URL**: `http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/records`
 - **Swagger Documentation**: `http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/swagger-ui/index.html`
 - **Health Check**: `http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/actuator/health`
 - **Service Status**: `http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/actuator/info`
+
+> **Note**: These URLs are accessible from anywhere and point to the production deployment on AWS EKS cluster.
 
 ## 📋 Prerequisites
 
@@ -114,10 +116,11 @@ This microservice provides a REST API for managing user records with complete CR
    ./mvnw spring-boot:run
    ```
 
-5. **Access the application**
-   - API Base URL: `http://localhost:9090`
-   - Swagger UI: `http://localhost:9090/swagger-ui.html`
+5. **Access the application locally**
+   - API Base URL: `http://localhost:9090/records`
+   - Swagger UI: `http://localhost:9090/swagger-ui/index.html`
    - Actuator Health: `http://localhost:9090/actuator/health`
+   - Service Status: `http://localhost:9090/actuator/info`
 
 ### Docker Deployment
 
@@ -181,7 +184,14 @@ This microservice provides a REST API for managing user records with complete CR
 
 ## 📚 API Documentation
 
-### Base URL
+### Base URLs
+
+**Production (AWS Load Balancer):**
+```
+http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/records
+```
+
+**Local Development:**
 ```
 http://localhost:9090/records
 ```
@@ -214,6 +224,44 @@ http://localhost:9090/records
 - **Mobile Number**: Exactly 10 digits, required
 
 ### Example API Calls
+
+#### Production API Examples (AWS Load Balancer)
+
+**Create User Record:**
+```bash
+curl -X POST http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/records/create \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Doe",
+    "description": "Full Stack Developer with 5 years experience",
+    "email": "john.doe@example.com",
+    "mobileNumber": "1234567890"
+  }'
+```
+
+**Fetch User Record:**
+```bash
+curl -X GET "http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/records/fetch?mobileNumber=1234567890"
+```
+
+**Update User Record:**
+```bash
+curl -X PUT http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/records/update \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "John Smith",
+    "description": "Senior Full Stack Developer with 6 years experience",
+    "email": "john.smith@example.com",
+    "mobileNumber": "1234567890"
+  }'
+```
+
+**Delete User Record:**
+```bash
+curl -X DELETE "http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/records/delete?mobileNumber=1234567890"
+```
+
+#### Local Development API Examples
 
 **Create User Record:**
 ```bash
@@ -338,4 +386,10 @@ This project is licensed under the Apache License 2.0 - see the [LICENSE](https:
 
 ---
 
-For detailed API documentation, visit the Swagger UI at `http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/swagger-ui/index.html` when the application is running.
+## 📖 API Documentation Access
+
+### Production Environment
+- **Swagger UI**: [http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/swagger-ui/index.html](http://k8s-default-userreco-50ea7e1430-2080954465.us-east-1.elb.amazonaws.com/swagger-ui/index.html)
+
+### Local Development
+- **Swagger UI**: `http://localhost:9090/swagger-ui/index.html` (when running locally)
